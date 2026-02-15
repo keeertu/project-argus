@@ -139,10 +139,10 @@ This repository contains our proposal for the **AI for Bharat Hackathon** (AWS s
 
 
 ## Team
-Keerat Khanuja
-Rohit Nema
-Utsava Vardhana
-Mohammad Ayaan
+- Keerat Khanuja
+- Rohit Nema
+- Utsava Vardhana
+- Mohammad Ayaan
 
 ## License
 
