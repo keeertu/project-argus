@@ -87,10 +87,6 @@ Refer to `requirements.md` for detailed functional and technical requirements, a
 
 This project was built for the **AI for Bharat Hackathon**, addressing the critical need for consumer protection in India's digital rental marketplace. The solution demonstrates practical AI applications that can create immediate social impact by protecting vulnerable renters from financial fraud.
 
-## Team
-
-[Team member details to be added]
-
 ## License
 
 This project is developed for educational and social impact purposes. Usage terms to be determined.
