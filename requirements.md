@@ -1,197 +1,345 @@
-# Requirements Document
-## AI-Powered Fake Rental Listing & Broker Scam Detection Platform
+# Project Argus: Requirements Document
+## AI-Powered Rental Scam Detection for Indian Cities
 
-### 1. Problem Definition
+### 1. Problem Statement
 
-Rental housing scams and misleading listings are widespread across Indian cities, particularly affecting vulnerable groups such as students, migrants, and first-time renters. These scams manifest through:
+When my family was relocating from Rajnandgaon to Durg, we found a listing that seemed too good to be true—decent rent, great photos, perfect location. Something felt off, so we decided to verify it ourselves. My dad pulled up Google Maps and started virtually walking through the streets to find the exact house. As he navigated deeper into the area, he suddenly stopped. 'Beta, we're not taking a house there,' he said quietly. That neighborhood had a reputation we didn't know about from just looking at the listing.
 
-- Unrealistically low prices to attract victims
-- Reused or stolen property images across multiple fake listings
-- Deceptive language patterns creating false urgency
-- Fraudulent brokers posting repetitive spam listings
-- Advance payment demands before property viewing
+Later, we discovered the full extent of the deception: the photos were stolen from another property, the address didn't match the actual location, and the 'broker' had disappeared from multiple platforms. Had we not taken that extra step to verify, we would have lost ₹20,000 in advance payment—money that would have been impossible to recover.
 
-The lack of a trust verification layer in the rental discovery process leads to financial losses, wasted time, and emotional distress for renters.
+We got lucky. Most people don't. That experience showed us the gap in India's rental ecosystem—there's no automated system to catch these red flags before families make costly mistakes. That's why we're building Project Argus.
 
-### 2. Objectives
+**The Scale of the Problem:**
 
-**Primary Objective:**
-Build an AI-powered trust layer that analyzes rental listings and warns users about potential scams before they engage with brokers or make payments.
+- Over 15 million people relocate to Indian metros annually for education and work
+- An estimated ₹500+ crores lost to rental fraud each year across major cities
+- 1 in 4 renters report encountering suspicious listings (based on consumer forums and news reports)
+- Students and migrants are primary targets—they're unfamiliar with local markets and desperate for housing
 
-**Secondary Objectives:**
-- Reduce rental fraud incidents in Indian cities
-- Save time by filtering out fake listings early
-- Improve confidence in rental search processes
-- Provide educational insights about scam patterns
-- Create a scalable foundation for future enhancements
+**How Scams Work:**
 
-### 3. Target Users
+The rental fraud playbook in India is sophisticated:
 
-**Primary Users:**
-- Students relocating to cities for education
-- Migrant workers seeking urban housing
-- Young professionals moving for jobs
-- First-time renters unfamiliar with local markets
+- Listings priced 30-50% below market rates to attract desperate renters
+- Stock photos or images stolen from legitimate listings used repeatedly
+- Urgency tactics: "Only 2 days left", "10 people interested", "pay token to hold"
+- Fake broker networks operating across multiple platforms
+- Advance payments demanded before property visits
+- Unverified phone numbers that go dead after payment
 
-**Secondary Users:**
-- Families searching for rental properties
-- Housing advocacy groups
-- Rental platform operators seeking trust features
+**Why This Matters:**
 
-### 4. Functional Requirements
+The victims are India's most vulnerable urban population:
 
-#### 4.1 Input Capabilities
-- Accept rental listing URLs from popular Indian platforms
-- Allow manual input of listing details (price, location, description, images)
-- Support text paste functionality for listing descriptions
-- Handle multiple image uploads for analysis
+- Students spending their family's savings on education
+- Migrant workers sending money home while searching for housing
+- Women relocating alone who face additional safety concerns
+- First-time renters with no knowledge of local market rates
 
-#### 4.2 Analysis Features
-- **Price Anomaly Detection**: Compare listing price against locality benchmarks
-- **Image Similarity Detection**: Identify reused or duplicate images across listings
-- **Text Pattern Analysis**: Detect suspicious language patterns using NLP
-- **Broker Behavior Tracking**: Identify patterns in repeated suspicious postings
-- **Risk Scoring**: Generate composite risk score from multiple signals
+**The Current Gap:**
 
-#### 4.3 Output Capabilities
-- Classify listings into three categories: Likely Genuine, Suspicious, High Scam Risk
-- Provide risk score (0-100 scale)
-- Display detailed explanation of detected risk signals
-- Offer actionable safety recommendations
-- Show confidence level for the classification
+Rental platforms in India have no trust verification layer. Users rely on:
 
-#### 4.4 User Feedback System
-- Allow users to report scam experiences
-- Enable feedback on classification accuracy
-- Collect data for model improvement (future enhancement)
+- Their own judgment (often wrong when desperate)
+- Reviews (easily faked or absent for new listings)
+- Gut feeling (scammers are professionals)
 
-#### 4.5 Data Management
-- Store analyzed listings for pattern recognition
-- Maintain image database for similarity matching
-- Track broker/phone number patterns (when available)
-- Use synthetic or publicly available data for MVP
+There's no AI-powered system analyzing listings for fraud patterns before users engage with brokers. By the time someone realizes it's a scam, money is already lost.
 
-### 5. Non-Functional Requirements
+**What We're Building:**
 
-#### 5.1 Performance
-- Analysis completion within 10 seconds for standard listings
-- Support concurrent analysis of multiple listings
-- Handle image processing efficiently (< 5 seconds per image set)
+Project Argus is an AI scam detector that sits between rental listings and renters, analyzing listings in real-time to warn users before they make contact or payments.
 
-#### 5.2 Usability
-- Simple, intuitive user interface requiring no technical knowledge
-- Mobile-responsive design for smartphone users
-- Clear visual indicators for risk levels (color-coded)
-- Explanations in simple, non-technical language
+---
 
-#### 5.3 Scalability
-- Modular architecture allowing component upgrades
-- Database design supporting growing listing volumes
-- API-ready structure for future integrations
-- Cloud deployment capability
+### 2. Solution Overview
 
-#### 5.4 Reliability
-- Graceful handling of incomplete listing data
-- Fallback mechanisms when specific analysis components fail
-- Clear communication of analysis limitations
+**What is Project Argus?**
 
-#### 5.5 Security & Privacy
-- No storage of user personal information
-- Secure handling of uploaded images
-- Compliance with data protection considerations
-- Transparent data usage policies
+Project Argus is an AI-powered verification system that analyzes rental listings across multiple signals to detect fraud patterns. Users paste a listing URL or details, and within seconds receive a risk assessment with clear explanations.
 
-#### 5.6 Maintainability
-- Well-documented codebase
-- Modular component design
-- Version-controlled model artifacts
-- Logging and monitoring capabilities
+**How It Works:**
 
-### 6. System Capabilities
+```
+User finds listing → Pastes URL into Argus → AI analyzes in <10 seconds → 
+Risk score + warnings displayed → User makes informed decision
+```
 
-#### 6.1 AI/ML Capabilities
-- Natural Language Processing for text analysis
-- Computer Vision for image similarity detection
-- Statistical anomaly detection for pricing
-- Pattern recognition for behavioral analysis
-- Multi-signal fusion for risk scoring
+**The AI Analysis:**
 
-#### 6.2 Integration Capabilities
-- REST API for external platform integration
-- Webhook support for real-time analysis
-- Export functionality for analysis reports
-- Extensible plugin architecture
+Argus runs four parallel detection engines:
 
-#### 6.3 Analytical Capabilities
-- Historical trend analysis for pricing
-- Geographic clustering of scam patterns
-- Temporal pattern detection (seasonal scams)
-- Broker reputation scoring
+1. **Price Anomaly Detection**: Compares listing price against locality benchmarks to flag unrealistic pricing
+2. **Image Similarity Analysis**: Detects stolen or reused property photos across the web
+3. **Text Pattern Recognition**: NLP analysis identifies scam language patterns and urgency tactics
+4. **Behavioral Pattern Detection**: Tracks broker posting patterns and repetitive spam indicators
 
-### 7. Constraints and Assumptions
+All signals combine into a single risk score (0-100) with a clear verdict: Likely Genuine, Suspicious, or High Scam Risk.
 
-#### 7.1 Constraints
-- MVP uses publicly available or synthetic data only
-- No direct integration with rental platforms initially
-- Limited to English and Hindi language support for MVP
-- Focused on major Indian cities (Mumbai, Delhi, Bangalore, Pune, Hyderabad, Chennai)
-- Hackathon timeline limits feature scope
+**Key Differentiator:**
 
-#### 7.2 Assumptions
-- Users have internet connectivity
-- Listing data can be extracted from URLs or provided manually
-- Sufficient training data available for model development
-- Users understand that AI predictions are probabilistic, not definitive
-- Rental listing formats follow common patterns across platforms
+Most fraud detection focuses on one signal. Argus uses multi-signal fusion—scammers might fake one thing (good photos), but they can't fake everything (market-rate pricing + unique images + professional descriptions + verified broker history).
 
-#### 7.3 Technical Assumptions
-- Python-based backend for AI/ML components
-- Modern web technologies for frontend
-- Cloud or local deployment options available
-- Open-source libraries and models can be utilized
+**Why AI?**
 
-### 8. Success Criteria
+Humans can't:
 
-**MVP Success Metrics:**
-- Accurately classify 80%+ of test listings
-- Complete analysis within performance requirements
-- Demonstrate all core detection capabilities
-- Receive positive feedback from demo users
-- Successfully present at hackathon
+- Compare prices across thousands of listings in seconds
+- Remember if they've seen an image before across different platforms
+- Detect subtle language patterns that scammers use
+- Track broker behavior across time and platforms
 
-**Future Success Metrics:**
-- User adoption and retention rates
-- Reduction in reported scam incidents among users
-- Positive user feedback scores
-- Platform partnership interest
-- Community contribution and engagement
+AI can do all of this instantly.
 
-### 9. Out of Scope (for MVP)
+**India-Specific Design:**
 
-- Real-time monitoring of rental platforms
-- Mobile native applications
-- Payment processing or escrow services
-- Legal verification of properties
-- Direct broker communication features
-- Multi-language support beyond English/Hindi
-- Blockchain or advanced verification technologies
-- Integration with government property databases
+- Trained on Indian rental market patterns (₹ pricing, locality names, Indian English)
+- Understands Hinglish text patterns common in listings
+- Knows Indian city geography and neighborhood pricing
+- Recognizes India-specific scam tactics (token amount demands, broker spam patterns)
 
-### 10. Limitations of MVP
+**Target Impact:**
 
-- The current MVP uses only synthetic or publicly available data for listing analysis
-- Scam risk predictions are advisory and probabilistic, not guaranteed judgments
-- Broker and listing behavior tracking is limited due to lack of centralized verified data sources
-- Image similarity detection may not catch all manipulated or edited images
-- System accuracy improves as more user feedback and data become available
+If we can prevent even 10% of rental fraud in major cities, that's ₹50+ crores saved annually and thousands of families protected from financial distress.
 
-### 11. Future Enhancements
+---
 
-- Machine learning model continuous improvement
-- Expanded city and language coverage
+### 3. Core Features
+
+#### 3.1 Price Anomaly Detection
+
+**What it does:**
+Compares the listing price against real market data for that locality, property type, and amenities. Flags listings priced significantly below market rates.
+
+**How it works:**
+- Maintains a benchmark database of rental prices across Indian cities (scraped from legitimate platforms)
+- Uses statistical analysis (Z-scores, percentile rankings) to identify outliers
+- Considers factors: locality, property type (1BHK/2BHK/PG), furnishing, amenities
+- Flags listings >30% below market median as high risk
+
+**Why it matters:**
+"Too good to be true" pricing is the #1 scam indicator. Scammers use low prices to attract desperate renters who ignore other red flags.
+
+**Example:**
+A 2BHK in Koramangala, Bangalore typically rents for ₹25,000-30,000. A listing at ₹15,000 gets flagged immediately.
+
+---
+
+#### 3.2 Image Similarity Analysis
+
+**What it does:**
+Detects if property images have been stolen from other listings or reused across multiple fake postings.
+
+**How it works:**
+- Extracts visual features from uploaded images using computer vision (AWS Rekognition)
+- Performs reverse image search against a database of known listings
+- Calculates similarity scores to find duplicates or near-duplicates
+- Flags stock photos commonly used in scams
+
+**Why it matters:**
+Scammers rarely have access to real properties, so they steal photos. If the same "luxury apartment" appears in 10 different listings across cities, it's fake.
+
+**Example:**
+User uploads listing images. Argus finds the same photos used in 5 other listings in different cities—instant red flag.
+
+---
+
+#### 3.3 Text Pattern Recognition (NLP)
+
+**What it does:**
+Analyzes listing descriptions for suspicious language patterns, urgency tactics, and scam indicators using natural language processing.
+
+**How it works:**
+- Tokenizes and processes text using NLP (AWS Comprehend + custom models)
+- Detects scam keywords: "urgent", "advance payment", "limited time", "token amount"
+- Analyzes sentiment and urgency levels
+- Checks for vague descriptions (excessive "good", "nice", "best" without specifics)
+- Identifies grammar patterns typical of spam
+
+**Why it matters:**
+Scammers use psychological pressure tactics. Legitimate landlords provide detailed, calm descriptions. Scammers create urgency and demand immediate action.
+
+**Example:**
+Description says "URGENT! Only today offer! Pay token now or miss this luxury flat!" → High risk score.
+
+---
+
+#### 3.4 Risk Scoring & Explanation
+
+**What it does:**
+Combines all detection signals into a single, interpretable risk score with detailed explanations of what was found.
+
+**How it works:**
+- Weighted aggregation of all analyzer scores
+- Classification: 0-30 (Likely Genuine), 31-65 (Suspicious), 66-100 (High Scam Risk)
+- Generates human-readable explanations for each flag
+- Provides confidence level based on available data
+- Offers actionable safety recommendations
+
+**Why it matters:**
+Users need clear, actionable guidance—not just a number. Argus explains exactly why a listing is risky and what to do next.
+
+**Example Output:**
+```
+Risk Score: 78/100 - High Scam Risk
+
+⚠️ Price 45% below market average for this area
+⚠️ Images found in 3 other listings
+⚠️ Description contains urgency tactics
+✓ Broker phone number has no spam history
+
+Recommendation: Do not pay any advance. Verify property exists before contact.
+```
+
+---
+
+#### 3.5 User Interface
+
+**What it does:**
+Clean, mobile-responsive web app that makes verification effortless for non-technical users.
+
+**How it works:**
+- Simple input: paste listing URL or enter details manually
+- Real-time analysis with progress indicators
+- Color-coded risk display (green/yellow/red)
+- Detailed breakdown of findings
+- Shareable results for warning friends/family
+
+**Why it matters:**
+Our users are students and migrants, often on mobile devices, with limited tech literacy. The UI must be dead simple.
+
+---
+
+### 4. Technical Approach
+
+**AWS Services Integration:**
+
+- **Amazon Rekognition**: Image analysis and similarity detection
+- **Amazon Comprehend**: NLP for text pattern analysis and sentiment detection
+- **AWS Lambda**: Serverless compute for running analysis engines
+- **Amazon API Gateway**: RESTful API endpoints for frontend communication
+- **Amazon DynamoDB**: Fast NoSQL storage for listing metadata and results
+- **Amazon S3**: Image storage and caching
+- **Amazon CloudFront**: Content delivery for fast global access
+- **Amazon SageMaker** (future): Custom ML model training and deployment
+
+**AI/ML Models:**
+
+- Statistical anomaly detection for pricing (scikit-learn)
+- Pre-trained computer vision models for image feature extraction (ResNet/EfficientNet)
+- NLP transformers for text analysis (BERT-based models)
+- Custom pattern matching algorithms for behavioral detection
+- Ensemble scoring for risk aggregation
+
+**Architecture:**
+
+Three-tier design:
+
+1. **Frontend**: React web app (mobile-responsive)
+2. **API Layer**: AWS Lambda functions + API Gateway
+3. **AI Engines**: Parallel analysis pipelines feeding into risk scorer
+
+Data flows through AWS services, keeping infrastructure scalable and cost-effective.
+
+---
+
+### 5. Impact & Scale
+
+**Target Users:**
+
+- 15+ million renters annually in Indian metros (Mumbai, Delhi, Bangalore, Pune, Hyderabad, Chennai)
+- Primary: Students (5M+), young professionals (7M+), migrants (3M+)
+- Secondary: Families, housing advocacy groups, rental platforms
+
+**Potential Impact:**
+
+- **Financial**: Prevent ₹500+ crores in annual fraud losses
+- **Social**: Protect vulnerable populations from exploitation
+- **Trust**: Restore confidence in digital rental markets
+- **Scalability**: Start with 6 cities, expand to 20+ tier-1 and tier-2 cities
+
+**B2B Opportunity:**
+
+Rental platforms (99acres, Housing.com, NoBroker) could integrate Argus as a trust badge, reducing fraud on their platforms and increasing user confidence.
+
+**Network Effects:**
+
+As more users verify listings, Argus builds a larger database of scam patterns, improving accuracy for everyone. Community reporting creates a crowdsourced fraud detection network.
+
+---
+
+### 6. Success Metrics
+
+**Accuracy Targets:**
+
+- 85%+ precision in scam detection (minimize false positives)
+- 80%+ recall (catch most actual scams)
+- <10 second analysis time per listing
+- 95%+ uptime for API services
+
+**User Adoption:**
+
+- 10,000+ listings analyzed in first 3 months
+- 70%+ user satisfaction score
+- 50%+ return user rate
+- 1,000+ community scam reports submitted
+
+**Business Metrics:**
+
+- 2+ rental platform partnership discussions initiated
+- Media coverage in tech/consumer protection outlets
+- Positive feedback from hackathon judges and demo users
+
+---
+
+### 7. Roadmap
+
+**Phase 1: MVP (Months 1-3)**
+- Core detection engines (price, image, text)
+- Basic web interface
+- AWS infrastructure setup
+- Launch in 2 cities (Bangalore, Delhi)
+- 1,000+ test listings analyzed
+
+**Phase 2: Scale (Months 4-6)**
+- Mobile-responsive optimization
+- Expand to 6 cities
+- Add behavioral pattern detection
+- User feedback system
+- 10,000+ listings analyzed
+
+**Phase 3: Platform (Months 7-12)**
 - Browser extension for seamless integration
-- Community-driven scam database
+- B2B API for rental platforms
+- Community reporting features
+- Regional language support (Hindi, Tamil, Telugu)
+- 100,000+ listings analyzed
+
+**Future Vision:**
+- Mobile apps (iOS/Android)
+- Real-time monitoring of rental platforms
 - Verified broker network
-- Property verification partnerships
-- Advanced behavioral analytics
-- Predictive scam trend analysis
+- Integration with consumer protection agencies
+- Pan-India coverage (50+ cities)
+
+---
+
+### 8. Team & Execution
+
+**What We Need:**
+
+- **AI/ML Engineer**: Build detection engines, integrate AWS AI services
+- **Backend Developer**: API infrastructure, AWS Lambda functions
+- **Frontend Developer**: React web app, user experience
+- **Domain Expert**: Indian rental market knowledge, scam pattern research
+
+**Timeline:**
+
+- Week 1: Core infrastructure + price analyzer
+- Week 2: Image and text analyzers
+- Week 3: Risk scoring + UI polish
+- Week 4: Testing + demo preparation
+
+**Why We'll Succeed:**
+
+We're building a focused MVP that demonstrates clear value. Every feature directly addresses a real scam tactic. Every AWS service has a specific purpose. Every design decision prioritizes user impact. The problem is validated, the technology is proven, and the path to execution is clear.
