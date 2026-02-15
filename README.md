@@ -137,12 +137,15 @@ This repository contains our proposal for the **AI for Bharat Hackathon** (AWS s
 
 ---
 
+<<<<<<< HEAD
 ## Team
 
 [Team member details to be added]
 
 ---
 
+=======
+>>>>>>> 1b955968275883fe108437d8ae3f661213a88776
 ## License
 
 This project is developed for educational and social impact purposes as part of the AI for Bharat Hackathon.
