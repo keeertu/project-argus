@@ -18,9 +18,9 @@ export default function RiskGauge({ score, verdict }) {
   };
 
   return (
-    <div className="flex flex-col items-center py-6 md:py-8">
-      <div className="relative w-64 md:w-80 h-32 md:h-40 mb-6">
-        <svg viewBox="0 0 200 100" className="w-full h-full">
+    <div className="flex flex-col items-center py-6 md:py-8 px-4">
+      <div className="relative w-full max-w-md h-40 md:h-48 mb-8">
+        <svg viewBox="0 0 200 100" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="greenGradient" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="#10b981" stopOpacity="0.8" />
@@ -91,14 +91,15 @@ export default function RiskGauge({ score, verdict }) {
           initial={{ scale: 0, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.5, type: "spring" }}
-          className="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center"
+          style={{ marginTop: '-10px' }}
         >
-          <div className="flex items-baseline justify-center">
+          <div className="flex items-baseline justify-center gap-1">
             <motion.span
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
-              className="text-4xl md:text-6xl font-bold text-white"
+              className="text-5xl md:text-6xl font-bold text-white"
               style={{ 
                 textShadow: `0 0 20px ${getColor()}40`,
                 color: getColor()
@@ -106,7 +107,7 @@ export default function RiskGauge({ score, verdict }) {
             >
               {score}
             </motion.span>
-            <span className="text-xl md:text-2xl text-gray-500 ml-1">/100</span>
+            <span className="text-xl md:text-2xl text-gray-500">/100</span>
           </div>
         </motion.div>
       </div>
@@ -136,10 +137,10 @@ export default function RiskGauge({ score, verdict }) {
         transition={{ delay: 1.0 }}
         className="text-center"
       >
-        <div className="text-3xl font-bold mb-2" style={{ color: getColor() }}>
+        <div className="text-2xl md:text-3xl font-bold mb-2 px-4" style={{ color: getColor() }}>
           {verdict}
         </div>
-        <div className="text-base text-gray-400 max-w-md">
+        <div className="text-sm md:text-base text-gray-400 max-w-md px-4">
           {score <= 30 && 'This listing appears safe to proceed with normal caution'}
           {score > 30 && score <= 65 && 'Exercise caution - verify details before proceeding'}
           {score > 65 && 'High risk detected - strongly recommend avoiding this listing'}
