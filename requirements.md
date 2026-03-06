@@ -229,6 +229,7 @@ Our users are students and migrants, often on mobile devices, with limited tech 
 - Pre-trained computer vision models for image feature extraction (ResNet/EfficientNet)
 - NLP transformers for text analysis (BERT-based models)
 - Custom pattern matching algorithms for behavioral detection
+- **LLM Reasoning Layer**: Cross-signal synthesis using Claude 3.5 Sonnet to generate natural language "forensic explanations" for complex scam patterns.
 - Ensemble scoring for risk aggregation
 
 **Architecture:**
