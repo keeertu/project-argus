@@ -29,10 +29,11 @@ function App() {
       setAppState('analyzing');
 
       try {
+        const startTime = Date.now();
         const formData = new FormData();
         formData.append('url', url);
 
-        const response = await fetch('http://localhost:8000/analyze/url', {
+        const response = await fetch('http://localhost:8080/analyze/url', {
           method: 'POST',
           body: formData
         });
@@ -41,20 +42,18 @@ function App() {
 
         // Ensure cinematic loading screen shows for at least 4.8s (4 steps * 1.2s)
         const minLoadingTime = 5000;
-        const startTime = Date.now();
-
         const timeElapsed = Date.now() - startTime;
         const remainingTime = Math.max(0, minLoadingTime - timeElapsed);
 
         setTimeout(() => {
-          setAnalysisResult(result.error ? { ...MOCK_RESULT, error: result.error } : result);
+          setAnalysisResult(result);
           setAppState('results');
         }, remainingTime);
 
       } catch (error) {
         console.error('Analysis failed:', error);
         setTimeout(() => {
-          setAnalysisResult({ ...MOCK_RESULT, error: "Connection to Argus AI server lost. Please try again." });
+          setAnalysisResult({ error: "Connection to Argus AI server lost. Please try again." });
           setAppState('results');
         }, 1000);
       }

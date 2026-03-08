@@ -11,31 +11,48 @@ router = APIRouter(prefix="/analyze", tags=["analyze"])
 
 def save_to_dynamodb(listing_id: str, input_data: dict, result: dict):
     """Save analysis result to DynamoDB"""
+    from decimal import Decimal
+    
     try:
         # Skip if no AWS credentials (demo mode)
         if not os.getenv('AWS_ACCESS_KEY_ID') and not os.getenv('AWS_REGION'):
             print("Demo mode: Skipping DynamoDB save")
             return
             
-        dynamodb = boto3.resource('dynamodb', region_name='ap-south-1')
-        table = dynamodb.Table('argus-submissions')
+        dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'ap-south-1'))
+        table = dynamodb.Table(os.getenv('DYNAMODB_TABLE', 'argus-submissions'))
+        
+        # Convert all values to DynamoDB-compatible types (no raw floats)
+        def to_dynamo(val):
+            if isinstance(val, float):
+                return Decimal(str(val))
+            if isinstance(val, dict):
+                return {k: to_dynamo(v) for k, v in val.items() if v is not None}
+            if isinstance(val, list):
+                return [to_dynamo(v) for v in val]
+            return val
         
         item = {
             'listing_id': listing_id,
             'timestamp': datetime.utcnow().isoformat(),
-            'city': input_data.get('city'),
-            'locality': input_data.get('locality'),
-            'price': input_data.get('price'),
-            'property_type': input_data.get('property_type'),
-            'final_score': result.get('risk_score'),
-            'verdict': result.get('verdict'),
-            'title': input_data.get('title'),
-            'description': input_data.get('description')
+            'city': input_data.get('city', 'unknown'),
+            'locality': input_data.get('locality', 'unknown'),
+            'price': to_dynamo(input_data.get('price', 0)),
+            'property_type': input_data.get('property_type', 'unknown'),
+            'final_score': to_dynamo(result.get('risk_score', 0)),
+            'risk_level': result.get('risk_level', 'unknown'),
+            'verdict': result.get('verdict', result.get('risk_level', 'unknown')),
+            'title': input_data.get('title', ''),
+            'description': input_data.get('description', '')[:500],  # truncate long descriptions
         }
         
+        # Remove any None values (DynamoDB rejects them)
+        item = {k: v for k, v in item.items() if v is not None}
+        
         table.put_item(Item=item)
+        print(f"DynamoDB save OK: listing_id={listing_id}")
     except Exception as e:
-        print(f"Error saving to DynamoDB: {str(e)}")
+        print(f"DynamoDB save failed: {e}")
         # Don't fail the request if DynamoDB save fails
 
 @router.post("/", response_model=AnalysisResult)
@@ -162,6 +179,13 @@ async def analyze_listing_url(url: str = Form(...)):
         
         # Run the full production pipeline
         result = await run_argus_analysis(url)
+        
+        # Save to DynamoDB
+        save_to_dynamodb(
+            listing_id=result.get("listing_id", str(uuid.uuid4())),
+            input_data={"url": url, "city": result.get("city", ""), "title": url.split("/")[-1]},
+            result=result,
+        )
         
         # Return the normalized service result directly
         return result

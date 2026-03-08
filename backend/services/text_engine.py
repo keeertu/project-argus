@@ -23,7 +23,7 @@ def analyze_text(title: str, description: str, contact_number: Optional[str] = N
         # Initialize Bedrock client
         bedrock = boto3.client(
             service_name='bedrock-runtime',
-            region_name='ap-south-1'
+            region_name=os.getenv('AWS_REGION', 'ap-south-1')
         )
         
         # Prepare the listing text
@@ -70,7 +70,7 @@ Return ONLY a valid JSON object:
         
         # Call Bedrock
         response = bedrock.invoke_model(
-            modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+            modelId=os.getenv('BEDROCK_MODEL_ID', 'anthropic.claude-3-5-sonnet-20241022-v2:0'),
             body=json.dumps(request_body)
         )
         

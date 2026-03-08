@@ -135,12 +135,15 @@ class LLMExplainer:
     # ------------------------------------------------------------------
 
     def _call_openrouter(self, prompt: str) -> str:
-        """Call OpenRouter using the OpenAI-compatible Python SDK."""
+        """Call OpenRouter using the OpenAI-compatible Python SDK with retry logic."""
+        import time
+
         api_key = os.getenv("OPENROUTER_API_KEY")
         if not api_key:
             raise EnvironmentError(
                 "Please set OPENROUTER_API_KEY in your environment or .env file."
             )
+        logger.info(f"OpenRouter: API key loaded (ends ...{api_key[-6:]})")
 
         try:
             from openai import OpenAI
@@ -153,22 +156,37 @@ class LLMExplainer:
         client = OpenAI(
             api_key=api_key,
             base_url=_OPENROUTER_BASE_URL,
+            timeout=30.0,
             default_headers={
                 "HTTP-Referer": "https://github.com/project-argus",
                 "X-Title":      "Project Argus - Rental Scam Detector",
             },
         )
 
-        response = client.chat.completions.create(
-            model=_OPENROUTER_MODEL,
-            messages=[
-                {"role": "system", "content": _SYSTEM_PROMPT},
-                {"role": "user",   "content": prompt},
-            ],
-            temperature=0.3,
-            max_tokens=200,
-        )
-        return response.choices[0].message.content.strip()
+        max_retries = 2
+        last_error = None
+        for attempt in range(1, max_retries + 1):
+            try:
+                logger.info(f"OpenRouter: Attempt {attempt}/{max_retries}...")
+                response = client.chat.completions.create(
+                    model=_OPENROUTER_MODEL,
+                    messages=[
+                        {"role": "system", "content": _SYSTEM_PROMPT},
+                        {"role": "user",   "content": prompt},
+                    ],
+                    temperature=0.3,
+                    max_tokens=200,
+                )
+                text = response.choices[0].message.content.strip()
+                logger.info(f"OpenRouter: Success on attempt {attempt}")
+                return text
+            except Exception as e:
+                last_error = e
+                logger.warning(f"OpenRouter: Attempt {attempt} failed: {e}")
+                if attempt < max_retries:
+                    time.sleep(2 * attempt)  # exponential backoff
+
+        raise last_error
 
     def _call_bedrock(self, prompt: str) -> str:
         import boto3

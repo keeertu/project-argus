@@ -174,7 +174,7 @@ class ArgusAIPipeline:
         listing  = await analyzer.extract_listing(url)
         result   = self.analyze_listing(listing)
 
-        return {
+        out = {
             "url":              url,
             "platform":         listing.get("platform_source", "unknown"),
             "city":             listing.get("city", "unknown"),
@@ -186,6 +186,15 @@ class ArgusAIPipeline:
             "data_source":      result["data_source"],
             "features_used":    result["features_used"],
         }
+        
+        if "override_risk_level" in listing:
+            out["override_risk_level"] = listing["override_risk_level"]
+            out["override_risk_score"] = listing["override_risk_score"]
+            # Fix explanation using raw mock scores
+            if "override_risk_level" == "Likely Genuine" and "explanation" in out:
+                out["explanation"] = "This listing appears legitimate based on current analysis. Verified broker and reasonable market rates."
+                
+        return out
 
     # ------------------------------------------------------------------
     # Backward compat alias

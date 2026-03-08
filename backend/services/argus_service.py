@@ -21,65 +21,7 @@ async def analyze_listing_url(url: str) -> dict:
     """
     logger.info(f"ArgusService: Analyzing URL -> {url}")
     
-    # --- DEMO OVERRIDE LAYER ---
-    LOW_RISK_ID = "R88345030"
-    HIGH_RISK_ID = "H89314277"
-
-    url_upper = url.upper()
-    if LOW_RISK_ID.upper() in url_upper:
-        logger.warning(f"DemoMode: [MATCH] Intercepted Low Risk URL with ID {LOW_RISK_ID}")
-        return {
-            "listing_id": LOW_RISK_ID,
-            "url": url,
-            "platform": "99acres",
-            "city": "bangalore",
-            "price": 45000,
-            "risk_level": "Low Risk",
-            "risk_score": 15,
-            "confidence_score": 0.82,
-            "confidence_label": "High Confidence",
-            "explanation": "This listing appears legitimate. The price aligns with regional market patterns and no suspicious broker behavior was detected.",
-            "data_source": "Demo Override",
-            "recommendations": [
-                "Verify property ownership documents",
-                "Visit the property before signing agreements",
-                "Confirm broker credentials if applicable"
-            ],
-            "signals": {
-                "Price vs Market": 0.95,
-                "Urgency Language": 0,
-                "Phone Reuse": 1,
-                "Image Count": 6,
-            }
-        }
-
-    if HIGH_RISK_ID.upper() in url_upper:
-        logger.warning(f"DemoMode: [MATCH] Intercepted High Risk URL with ID {HIGH_RISK_ID}")
-        return {
-            "listing_id": HIGH_RISK_ID,
-            "url": url,
-            "platform": "99acres",
-            "city": "bangalore",
-            "price": 12000,
-            "risk_level": "High Risk",
-            "risk_score": 88,
-            "confidence_score": 0.91,
-            "confidence_label": "High Confidence",
-            "explanation": "This listing shows several high-risk indicators including below-market pricing and repeated broker contact patterns.",
-            "data_source": "Demo Override",
-            "recommendations": [
-                "Do not send advance payment before property verification",
-                "Verify broker identity and ownership documentation",
-                "Cross-check the listing on multiple platforms"
-            ],
-            "signals": {
-                "Price vs Market": 0.48,
-                "Urgency Language": 3,
-                "Phone Reuse": 7,
-                "Image Count": 1,
-            }
-        }
-    # ---------------------------
+    # --- DEMO OVERRIDE LAYER REMOVED ---
 
     try:
         # Run the full pipeline (Scrape/Synthetic -> Preprocess -> Predict -> Explain)
@@ -103,13 +45,25 @@ async def analyze_listing_url(url: str) -> dict:
             "Request a live video call if you cannot visit immediately."
         ]
 
+        # Normalize risk_score to a 0-100 integer for the frontend.
+        # Formula: normalized = int((1 - (raw_score + 0.5)) * 100), clamped 0-100
+        raw_score = result.get("risk_score", 0)
+        risk_level = result.get("risk_level", "Suspicious")
+        
+        normalized = int((1 - (raw_score + 0.5)) * 100)
+        ui_score = max(0, min(100, normalized))
+        
+        # Allow explicit overrides from demo/test fallbacks
+        final_risk_level = result.get("override_risk_level") or risk_level
+        final_risk_score = result.get("override_risk_score") or ui_score
+
         return {
             "listing_id":       result.get("listing_id", "unknown"),
             "url":              result.get("url"),
-            "risk_level":       result.get("risk_level"),
-            "risk_score":       result.get("risk_score") or int(result.get("confidence_score", 0.5) * 100),
+            "risk_level":       final_risk_level,
+            "risk_score":       final_risk_score,
             "confidence_score": result.get("confidence_score", 0.5),
-            "explanation":      result.get("explanation"),
+            "explanation":      result.get("explanation", ""),
             "recommendations":  recommendations,
             "signals": {
                 "Price vs Market":    result.get("features_used", {}).get("price_vs_city_median"),

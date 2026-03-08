@@ -31,7 +31,7 @@ def analyze_image(image_bytes: bytes, image_type: str) -> dict:
         # Initialize Bedrock client
         bedrock = boto3.client(
             service_name='bedrock-runtime',
-            region_name='ap-south-1'
+            region_name=os.getenv('AWS_REGION', 'ap-south-1')
         )
         
         # Encode image to base64
@@ -85,7 +85,7 @@ Return ONLY a valid JSON object:
         
         # Call Bedrock
         response = bedrock.invoke_model(
-            modelId="anthropic.claude-3-5-sonnet-20241022-v2:0",
+            modelId=os.getenv('BEDROCK_MODEL_ID', 'anthropic.claude-3-5-sonnet-20241022-v2:0'),
             body=json.dumps(request_body)
         )
         

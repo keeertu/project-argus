@@ -8,7 +8,7 @@
   --color-border: var(--border);
   --color-accent: var(--accent);
   --color-subtle: #94a3b8;
-  
+
   --font-sans: "Inter", ui-sans-serif, system-ui;
   --font-display: "Inter", ui-sans-serif, system-ui;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular;
@@ -16,15 +16,15 @@
 
 @layer base {
   :root {
-    --bg: #b0bec5; /* Distict Urban Blue Grey - Definitely NOT white */
+    --bg: #ffffff;
     --fg: #0f172a;
-    --muted: #475569;
-    --border: #94a3b8;
-    --surface: #e2e8f0;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --surface: #f8fafc;
     --accent: #f59e0b;
     --accent-fg: #000000;
-    --card: #e2e8f0;
-    --glow: rgba(245, 158, 11, 0.15);
+    --card: #ffffff;
+    --glow: rgba(245, 158, 11, 0.12);
   }
 
   [data-theme="dark"] {
@@ -62,7 +62,12 @@
     z-index: 9999;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-display tracking-tight;
   }
 }
@@ -71,7 +76,7 @@
   .text-balance {
     text-wrap: balance;
   }
-  
+
   .premium-bg {
     @apply relative overflow-hidden;
     background-color: var(--bg);
@@ -86,8 +91,8 @@
   /* Glassmorphism system - Updated to move away from white */
   .glass {
     @apply backdrop-blur-xl border shadow-sm;
-    background: rgba(203, 213, 225, 0.4); /* Based on --bg */
-    border-color: rgba(15, 23, 42, 0.1);
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 0, 0, 0.06);
   }
 
   [data-theme="dark"] .glass {
@@ -103,8 +108,16 @@
   .glow-blob {
     @apply absolute blur-[120px] rounded-full pointer-events-none opacity-20 -z-10;
   }
-  
-  .blob-orange { background: #f59e0b; }
-  .blob-purple { background: #8b5cf6; }
-  .blob-indigo { background: #6366f1; }
+
+  .blob-orange {
+    background: #f59e0b;
+  }
+
+  .blob-purple {
+    background: #8b5cf6;
+  }
+
+  .blob-indigo {
+    background: #6366f1;
+  }
 }

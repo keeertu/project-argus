@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 import boto3
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
+import os
 
 router = APIRouter(prefix="/submissions", tags=["submissions"])
 
@@ -28,8 +29,8 @@ def get_submission(listing_id: str):
         Submission details including analysis results
     """
     try:
-        dynamodb = boto3.resource('dynamodb', region_name='ap-south-1')
-        table = dynamodb.Table('argus-submissions')
+        dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'ap-south-1'))
+        table = dynamodb.Table(os.getenv('DYNAMODB_TABLE', 'argus-submissions'))
         
         response = table.get_item(Key={'listing_id': listing_id})
         
@@ -57,8 +58,8 @@ def list_submissions(limit: int = 10):
         List of recent submissions with basic details
     """
     try:
-        dynamodb = boto3.resource('dynamodb', region_name='ap-south-1')
-        table = dynamodb.Table('argus-submissions')
+        dynamodb = boto3.resource('dynamodb', region_name=os.getenv('AWS_REGION', 'ap-south-1'))
+        table = dynamodb.Table(os.getenv('DYNAMODB_TABLE', 'argus-submissions'))
         
         # Scan table and get last N items (sorted by timestamp)
         response = table.scan(Limit=limit)

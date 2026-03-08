@@ -33,7 +33,7 @@ def create_dynamodb_table():
         return False
     
     # Create table
-    table_name = 'argus-submissions'
+    table_name = os.getenv('DYNAMODB_TABLE', 'argus-submissions')
     
     try:
         print(f"\n📊 Creating DynamoDB table: {table_name}")
