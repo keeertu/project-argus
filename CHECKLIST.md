@@ -1,208 +1,76 @@
-# ✅ Project Argus - Pre-Demo Checklist
+# Project Argus — Status Checklist
 
-## 🔧 Technical Setup
+## What's Built & Working
 
-### Backend
-- [ ] DynamoDB table created (`python setup_aws.py`)
-- [ ] Backend deployed to AWS App Runner
-- [ ] Health check working (`/` endpoint returns 200)
-- [ ] API docs accessible (`/docs` endpoint)
-- [ ] IAM permissions configured (DynamoDB + Bedrock)
-- [ ] Amazon Bedrock Claude 3.5 Sonnet enabled
-- [ ] Environment variables set in App Runner
+### Backend (FastAPI + Python 3.11)
+- [x] FastAPI server with CORS, OpenAPI docs
+- [x] 5-stage AI pipeline (Scrape → Features → ML → LLM → Storage)
+- [x] Playwright + BS4 web scraping with fallback
+- [x] Feature engineering (price ratio, urgency keywords, image count, phone reuse)
+- [x] Isolation Forest anomaly detection model (scikit-learn)
+- [x] OpenRouter LLM integration (30s timeout, 2 retries)
+- [x] Risk score normalization (0–100 integer scale)
+- [x] DynamoDB persistence with Decimal conversion
+- [x] URL-based listing analysis endpoint (`/analyze/url`)
+- [x] Form-based listing analysis endpoint (`/analyze/`)
+- [x] Submissions query endpoints (`/submissions/`)
+- [x] Price benchmarks for 6 Indian cities, 40+ localities
 
-### Frontend
-- [ ] Frontend deployed to AWS Amplify
-- [ ] `VITE_API_URL` environment variable set
-- [ ] Build successful (no errors)
-- [ ] Site loads without errors
-- [ ] Mobile responsive (test on phone)
+### Frontend (React + Vite + Tailwind CSS)
+- [x] Landing page with animated hero section
+- [x] URL input form for listing analysis
+- [x] Animated loading screen with pipeline steps
+- [x] Risk gauge with color-coded scoring
+- [x] Results page with signals breakdown
+- [x] Dark mode / Light mode toggle
+- [x] Responsive design (mobile + desktop)
+- [x] GSAP animations
+- [x] Glassmorphism UI design
 
-### Integration
-- [ ] Frontend can reach backend API
-- [ ] CORS configured correctly
-- [ ] Demo listings load properly
-- [ ] Analysis completes successfully
-- [ ] Results display correctly
-
-## 🎯 Demo Preparation
-
-### Test All Demo Listings
-- [ ] Scam listing returns high risk (85-95)
-- [ ] Suspicious listing returns medium risk (50-65)
-- [ ] Genuine listing returns low risk (20-30)
-- [ ] Loading animation displays properly
-- [ ] Results are accurate and make sense
-
-### Visual Polish
-- [ ] Stats ticker shows correct numbers
-- [ ] Risk gauge animates smoothly
-- [ ] All colors display correctly
-- [ ] Mobile view looks professional
-- [ ] No console errors in browser
-
-### Performance
-- [ ] Analysis completes in 5-10 seconds
-- [ ] Page loads in under 3 seconds
-- [ ] No lag or stuttering
-- [ ] Images load properly
-- [ ] Animations are smooth
-
-## 📱 Device Testing
-
-- [ ] Desktop Chrome
-- [ ] Desktop Firefox
-- [ ] Desktop Safari
-- [ ] Mobile Chrome (Android)
-- [ ] Mobile Safari (iOS)
-- [ ] Tablet view
-
-## 🎤 Presentation Prep
-
-### Materials Ready
-- [ ] Demo URLs bookmarked
-- [ ] Pitch memorized (2 minutes)
-- [ ] Demo script practiced (3 minutes)
-- [ ] Q&A answers prepared
-- [ ] Screenshots as backup
-- [ ] Video recording as backup
-
-### Talking Points
-- [ ] Problem statement clear (₹500Cr lost)
-- [ ] Solution explained (AI-powered analysis)
-- [ ] Technical innovation highlighted (Bedrock)
-- [ ] Social impact emphasized (15M+ renters)
-- [ ] Business model ready (if asked)
-
-### Demo Flow
-- [ ] Know which button to click first
-- [ ] Can explain each result
-- [ ] Can navigate smoothly
-- [ ] Can handle errors gracefully
-- [ ] Can answer technical questions
-
-## 🚨 Backup Plans
-
-### If Live Demo Fails
-- [ ] Screenshots prepared
-- [ ] Video recording ready
-- [ ] Local version running
-- [ ] Architecture diagram ready
-- [ ] Code walkthrough prepared
-
-### If Internet Fails
-- [ ] Offline slides ready
-- [ ] Video demo downloaded
-- [ ] Mobile hotspot available
-- [ ] Alternative venue identified
-
-### If Questions Stump You
-- [ ] "Great question, let me elaborate..."
-- [ ] "That's on our roadmap..."
-- [ ] "We'd love to discuss that after..."
-- [ ] Redirect to strengths
-
-## 📊 Metrics to Remember
-
-- **₹500 Crore** - Lost annually to scams
-- **15M+** - Renters at risk
-- **1 in 4** - Listings are suspicious
-- **85%+** - Detection accuracy
-- **5-10 sec** - Analysis time
-- **40+** - Localities covered
-- **6** - Major cities supported
-- **$0.05** - Cost per analysis
-- **~$15/month** - Operating cost
-
-## 🎯 Judge Criteria
-
-### Innovation (25%)
-- [ ] Novel use of Amazon Bedrock
-- [ ] Multi-engine analysis approach
-- [ ] Real-time AI processing
-- [ ] Weighted scoring algorithm
-
-### Technical Implementation (25%)
-- [ ] Fully functional demo
-- [ ] Production-ready code
-- [ ] Scalable architecture
-- [ ] Clean, professional UI
-
-### Social Impact (25%)
-- [ ] Addresses real problem
-- [ ] Measurable impact (₹500Cr)
-- [ ] Helps vulnerable population
-- [ ] Free for individuals
-
-### Presentation (25%)
-- [ ] Clear problem statement
-- [ ] Engaging demo
-- [ ] Confident delivery
-- [ ] Handles questions well
-
-## 🏆 Winning Factors
-
-- [ ] **Real Problem** - Not a made-up use case
-- [ ] **Working Demo** - Actually deployed and functional
-- [ ] **AI Innovation** - Smart use of Bedrock
-- [ ] **Social Good** - Protects vulnerable people
-- [ ] **Scalable** - Can grow to millions of users
-- [ ] **Professional** - Looks production-ready
-- [ ] **Fast Build** - Impressive for 48 hours
-- [ ] **Cost-Effective** - Runs on free tier
-
-## ⏰ Final Hour Checklist
-
-### 60 Minutes Before
-- [ ] Test all demo flows one more time
-- [ ] Clear browser cache
-- [ ] Close unnecessary tabs
-- [ ] Charge laptop fully
-- [ ] Connect to stable WiFi
-- [ ] Have mobile hotspot ready
-
-### 30 Minutes Before
-- [ ] Open demo URLs
-- [ ] Test one analysis
-- [ ] Review pitch notes
-- [ ] Practice deep breathing
-- [ ] Visualize success
-
-### 10 Minutes Before
-- [ ] Close all other apps
-- [ ] Silence phone
-- [ ] Have water ready
-- [ ] Stand up, stretch
-- [ ] Smile and be confident
-
-### Right Before
-- [ ] Take a deep breath
-- [ ] Remember: You built something amazing
-- [ ] Be proud of your work
-- [ ] Have fun!
-
-## 🎤 Opening Lines
-
-"Hi, I'm [NAME] and this is Project Argus. Every year in India, ₹500 Crore is lost to rental scams. We built an AI system that can detect these scams in 5 seconds. Let me show you how it works."
-
-## 🎬 Closing Lines
-
-"Project Argus is ready to deploy today. It's ready to scale tomorrow. And it's ready to protect millions of Indian renters from losing their money. Thank you!"
+### AWS Integration
+- [x] DynamoDB table (`argus-submissions`) in `us-east-1`
+- [x] Read/write/delete operations working
+- [x] All boto3 clients use `os.getenv()` for credentials
+- [x] `.env` in `.gitignore` (never committed)
+- [x] Bedrock client configured (standby — needs inference profile)
+- [x] App Runner deployment config ready
+- [x] Amplify deployment config ready
 
 ---
 
-## ✨ You've Got This!
+## Tech Stack
 
-Remember:
-- You built something real
-- You solved a real problem
-- You used cutting-edge AI
-- You can help millions of people
-- You're ready to win
-
-**Now go show them what you've built! 🚀**
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, Vite, Tailwind CSS v4, GSAP |
+| Backend | FastAPI, Python 3.11, Uvicorn |
+| ML Model | scikit-learn (Isolation Forest) |
+| AI / LLM | OpenRouter (primary), AWS Bedrock (standby) |
+| Database | AWS DynamoDB |
+| Scraping | Playwright, BeautifulSoup4, lxml |
+| Data | Pandas, NumPy, Joblib |
+| Hosting | AWS App Runner (backend), AWS Amplify (frontend) |
 
 ---
 
-**Last Updated:** Before Demo
-**Status:** Ready to Win 🏆
+## AWS Services Integrated
+
+| Service | Status | Purpose |
+|---------|--------|---------|
+| DynamoDB | ✅ Active | Analysis submission storage |
+| App Runner | ✅ Ready | Backend hosting (Docker) |
+| Amplify | ✅ Ready | Frontend hosting |
+| Bedrock | ⚠️ Standby | Claude image/text analysis (needs inference profile) |
+| IAM | ✅ Configured | Role-based access |
+
+---
+
+## Known Limitations
+
+- 99acres blocks automated scraping → intelligent URL-based fallback active
+- Bedrock Sonnet v2 requires cross-region inference profile in us-east-1
+- OpenRouter LLM may time out under heavy load (mitigated with retry logic)
+
+---
+
+**Last Updated:** March 8, 2026
