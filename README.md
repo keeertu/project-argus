@@ -175,12 +175,6 @@ project-argus/
 
 ---
 
-## Team
-
-| Name | Role |
-|------|------|
-| Keertan | Lead Developer |
-
 ---
 
 ## License
