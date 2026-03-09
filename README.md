@@ -234,11 +234,13 @@ project-argus/
 ## Team
 
 **Keerat Khanuja**
+
 **Mohammad Ayaan**
+
 **Utsav Vardhana**
+
 **Rohit Nema**
 
-AI/ML Engineer | Full-Stack Developer | Passionate about using technology for social impact
 
 ---
 
